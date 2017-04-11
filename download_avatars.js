@@ -1,9 +1,18 @@
+//requiring important packages for the program
 const request = require("request");
-const fs = require("fs")
-console.log("Welcome to the Github Avatars Downloader");
+const fs = require("fs");
 
-var GITHUB_USER = "nawartamawi";
-var GITHUB_TOKEN = "cdfa261b3f0e65bf413e2c9824340f784708f51f";
+var repoOwnerInput = process.argv[2];
+var repoNameInput = process.argv[3];
+
+//requiring config from a secure file 
+const config = require("./config");
+var GITHUB_USER = config.GITHUB_USER;
+var GITHUB_TOKEN = config.GITHUB_TOKEN;
+console.log(GITHUB_TOKEN);
+
+//user welcoming message
+console.log("Welcome to the Github Avatars Downloader");
 
 
 function getRepoContributors(repoOwner, repoName, cb) { 
@@ -19,16 +28,19 @@ function getRepoContributors(repoOwner, repoName, cb) {
             throw err; 
         })
         .on('response', (response) => {
-
+            console.log
         });
 
 }
 
-getRepoContributors("jquery", "jquery", function(err, result){
+getRepoContributors(repoOwnerInput, repoNameInput, function(err, result){
     let resultsObject = JSON.parse(result.body);
     resultsObject.forEach((item)=>{
-        console.log(item.avatar_url)
+        console.log(item.avatar_url);
+        console.log(item.login);
+        downloadImageByURL(item.avatar_url, "avatars/"+item.login+".jpg");
     });
+
 });
 
 function downloadImageByURL(url, filepath) {
@@ -49,5 +61,5 @@ request.get(url)
     ;
         
 }
-downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg");
+//downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg");
 
