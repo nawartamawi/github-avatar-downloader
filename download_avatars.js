@@ -9,7 +9,6 @@ var repoNameInput = process.argv[3];
 const config = require("./config");
 var GITHUB_USER = config.GITHUB_USER;
 var GITHUB_TOKEN = config.GITHUB_TOKEN;
-console.log(GITHUB_TOKEN);
 
 //user welcoming message
 console.log("Welcome to the Github Avatars Downloader");
@@ -35,11 +34,14 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
 getRepoContributors(repoOwnerInput, repoNameInput, function(err, result){
     let resultsObject = JSON.parse(result.body);
+    try {
     resultsObject.forEach((item)=>{
         console.log(item.avatar_url);
         console.log(item.login);
         downloadImageByURL(item.avatar_url, "avatars/"+item.login+".jpg");
-    });
+    });} catch (err) { 
+        console.log("please inout a valid input!")
+    }
 
 });
 
